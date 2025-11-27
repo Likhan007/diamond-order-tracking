@@ -1,0 +1,562 @@
+/* =========================================================
+   Diamond Order Tracking - Final UI (v2.4)
+   ========================================================= */
+
+/* GLOBAL -------------------------------------------------- */
+
+body {
+    background: #f5f7fb;
+}
+
+body .dot-input,
+body input.dot-input,
+body textarea.dot-input {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+}
+
+/* WRAPPERS ------------------------------------------------ */
+
+.dot-admin-wrap {
+    max-width: 1200px;
+    margin: 22px auto;
+    font-family: inherit;
+    color: #222;
+    padding: 0 12px;
+}
+
+.dot-card {
+    background: linear-gradient(180deg, #ffffff 0%, #fdfdff 100%);
+    border: 1px solid rgba(15,23,42,0.08);
+    padding: 18px;
+    border-radius: 14px;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.09);
+    margin-bottom: 20px;
+}
+
+/* FORM ---------------------------------------------------- */
+
+.dot-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    align-items: end;
+}
+
+.dot-form-row2 {
+    display: grid;
+    grid-template-columns: 110px 1fr 150px;
+    gap: 12px;
+    margin-top: 12px;
+    align-items: stretch; /* Prevents overlap */
+}
+
+.dot-field {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.dot-label {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: #222;
+}
+
+/* Inputs */
+.dot-input {
+    padding: 10px 12px;
+    border: 1px solid #d0d5e0;
+    border-radius: 10px;
+    font-size: 14px;
+    width: 100%;
+    background: #fdfefe;
+    box-sizing: border-box;
+    box-shadow: inset 0 1px 2px rgba(15,23,42,0.06);
+}
+
+.dot-input:focus {
+    outline: none;
+    border-color: #0077b6;
+    box-shadow: 0 0 0 3px rgba(0,119,182,0.07);
+}
+
+.dot-input--qty {
+    max-width: 100%;
+    border: 1px solid #cbd5dd;
+}
+
+/* Create Order Button Column */
+.dot-form-row2 .dot-actions-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+.dot-form-row2 .dot-actions-right .btn {
+    width: 140px;
+}
+
+/* BUTTONS ------------------------------------------------- */
+
+.btn {
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    display: inline-block;
+    text-align: center;
+}
+
+.btn-primary {
+    background: #111827;
+    color: #fff;
+    box-shadow: 0 3px 0 rgba(0,0,0,0.1);
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+}
+
+/* TABLE --------------------------------------------------- */
+
+.dot-table-card {
+    background: #fefefe;
+    border: 1px solid rgba(15,23,42,0.08);
+    border-radius: 14px;
+    box-shadow: 0 18px 40px rgba(15,23,42,0.08);
+    overflow: hidden;
+}
+
+.dot-orders-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    min-width: 900px;
+}
+
+.dot-orders-table thead th {
+    background: #eef3fb;
+    color: #0f172a;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 14px 16px;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.dot-orders-table tbody td {
+    padding: 12px 16px !important;
+    vertical-align: middle !important;
+    border-bottom: 1px solid #f0f2f7;
+    font-size: 13px;
+    white-space: nowrap;
+    background: #ffffff;
+}
+
+/* Order column */
+.dot-order-id {
+    font-weight: 800;
+    color: #111827;
+    margin-bottom: 4px;
+}
+
+.dot-order-code {
+    color: #6b7280;
+    font-size: 12px;
+}
+
+/* Style + Qty */
+.dot-style {
+    font-weight: 700;
+    color: #111827;
+    display: block;
+}
+
+.dot-qty {
+    color: #6b7280;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+.dot-updated {
+    color: #6b7280;
+    font-size: 13px;
+}
+
+/* ACTION BUTTONS ------------------------------------------ */
+
+.dot-actions-cell {
+    text-align: center;
+}
+
+.dot-actions-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.dot-actions-row > a,
+.dot-actions-row > form {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 34px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* Buttons */
+.dot-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 13px;
+    border: 1px solid transparent;
+    background: #fff;
+    cursor: pointer;
+    min-width: 60px;
+}
+
+.dot-btn-edit {
+    color: #0077b6;
+    border-color: #dbeffd;
+}
+
+.dot-btn-delete {
+    color: #c2410c;
+    border-color: #fdecea;
+}
+
+.dot-btn-edit:hover { background: #f4fbff; transform: translateY(-1px); }
+.dot-btn-delete:hover { background: #fff5f5; transform: translateY(-1px); }
+
+.dot-delete-form { margin: 0 !important; }
+
+/* SEARCH DROPDOWN ------------------------------------------ */
+
+.dot-search-wrap {
+    position: relative;
+    max-width: 920px;
+}
+
+#dot-search-input { width: 100%; }
+
+.dot-search-results {
+    display: none;
+    position: relative;
+    z-index: 20;
+    margin-top: 6px;
+}
+
+.dot-search-list {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+    max-height: 320px;
+    overflow-y: auto;
+}
+
+.dot-search-item {
+    display: block;
+    padding: 10px 12px;
+    border-bottom: 1px solid #f6f6f6;
+    text-decoration: none;
+    color: #111;
+}
+
+.dot-search-item:hover {
+    background: #f7fbff;
+}
+
+.dot-search-code {
+    font-weight: 700;
+    color: #111827;
+}
+
+.dot-search-meta {
+    font-size: 12px;
+    color: #6b7280;
+    margin-top: 4px;
+}
+
+/* COMMENTS -------------------------------------------------- */
+
+.dot-comments-wrap {
+    overflow-y: auto;
+    padding: 8px 0;
+}
+
+.dot-comment {
+    padding: 12px 14px;
+    border: 1px solid #e4e7ec;
+    border-radius: 12px;
+    background: #fdfdff;
+    margin-bottom: 10px;
+    box-shadow: 0 6px 16px rgba(15,23,42,0.05);
+}
+
+.dot-comment-meta {
+    font-size: 12px;
+    color: #444;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.dot-comment-author {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.dot-comment-body {
+    margin-top: 4px;
+    color: #1f2933;
+    white-space: pre-wrap;
+}
+
+.dot-comment-delete {
+    border: none;
+    background: transparent;
+    color: #ff4d4f;
+    cursor: pointer;
+    font-size: 15px;
+    padding: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dot-comment-delete:hover {
+    color: #d62828;
+}
+
+.dot-no-comments {
+    color: #666;
+    padding: 10px 12px;
+}
+
+/* ===========================
+   Create Order redesign
+   =========================== */
+
+.dot-create-card {
+  padding: 18px;
+  border: 1px solid rgba(15,23,42,0.04);
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 24px rgba(4,12,20,0.04);
+}
+
+/* Grid layout for row1: 3 equal columns */
+.dot-create-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+
+/* Row2 uses flex so button can align and notes stay compact */
+.dot-create-grid-row2 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-end;
+  margin-top: 12px;
+}
+
+.dot-qty-field {
+  flex: 0 0 120px;
+}
+
+.dot-notes-field {
+  flex: 1 1 360px;
+  min-width: 260px;
+}
+
+.dot-action-field {
+  flex: 0 0 170px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.dot-action-field input[type="hidden"] {
+  display: none;
+}
+
+/* mobile collapse */
+@media (max-width: 880px) {
+  .dot-create-grid {
+    grid-template-columns: 1fr;
+  }
+  .dot-create-grid-row2 {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .dot-create-grid-row2 .dot-action-field .dot-action-wrapper { display:flex; justify-content:flex-start; }
+}
+
+/* Field styling */
+.dot-create-card .dot-field { display:flex; flex-direction:column; }
+.dot-create-card .dot-label { font-size:13px; font-weight:700; margin-bottom:6px; color:#111827; }
+.dot-create-card .dot-input { padding:10px 12px; border:1px solid #e2e8f0; border-radius:10px; background:#fff; font-size:14px; box-sizing:border-box; }
+
+/* Qty visible border and center alignment */
+.dot-create-card .dot-input--qty { border:1px solid #cbd5dd; max-width:100%; }
+
+/* For inputs that should expand to full width in their cell */
+.dot-input--full { width:100%; }
+
+/* Action wrapper ensures the button sits within its column bottom-right aligned on desktop */
+.dot-action-wrapper {
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  width:100%;
+}
+
+/* Button styling (no absolute positioning) */
+.dot-create-btn {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  background:#111827;
+  color:#fff;
+  padding:0 18px !important;
+  min-width:150px !important;
+  line-height:40px !important;
+  border-radius:30px !important;
+  border:none !important;
+  cursor:pointer;
+  font-weight:700;
+  box-shadow:0 4px 12px rgba(0,0,0,0.1);
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+.dot-create-btn:hover {
+  transform:translateY(-1px);
+  box-shadow:0 6px 14px rgba(0,0,0,0.12);
+}
+
+/* On narrow screens make button full width and natural flow */
+@media (max-width: 880px) {
+  .dot-create-btn { width:100%; }
+  .dot-action-wrapper { justify-content:flex-start; }
+}
+
+/* subtle focus states */
+.dot-create-card .dot-input:focus {
+  border-color:#0077b6;
+  box-shadow:0 0 0 4px rgba(0,119,182,0.06);
+  outline:none;
+}
+/* ---------- Compact desktop spacing without breaking alignment ---------- */
+@media (min-width: 881px) {
+  .dot-create-card { padding: 16px; }
+  .dot-create-grid { gap: 10px; }
+  .dot-create-grid-row2 { gap: 10px; }
+}
+
+/* ---------- Tighten vertical spacing across the form ---------- */
+.dot-create-card .dot-input,
+.dot-create-card .dot-label {
+  line-height: 1.1;
+}
+
+/* reduce input vertical padding a bit to make rows shorter */
+.dot-create-card .dot-input { padding: 8px 10px; border-radius: 8px; }
+
+/* ---------- Search icon style (inside input) ---------- */
+.dot-search-wrap { position: relative; max-width:920px; }
+.dot-search-wrap .dot-search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  color: #6b7280;
+  pointer-events: none;
+  z-index: 3;
+}
+#dot-search-input {
+  padding-left: 36px; /* space for icon */
+}
+
+/* make the icon slightly darker on focus */
+#dot-search-input:focus + .dot-search-icon,
+#dot-search-input:focus ~ .dot-search-icon {
+  color: #0077b6;
+}
+
+/* mobile: revert to stacked labels (keep vertical layout) */
+@media (max-width: 880px) {
+  .dot-create-card .dot-label { width: auto; margin-bottom:6px; display:block; }
+  .dot-create-grid .dot-field,
+  .dot-create-grid-row2 .dot-field {
+    display:flex;
+    flex-direction:column;
+    align-items:stretch;
+  }
+  #dot-search-input { padding-left: 12px; }
+  .dot-search-wrap .dot-search-icon { left: 8px; }
+}
+
+
+
+
+
+
+
+
+/* RESPONSIVE ------------------------------------------------ */
+
+@media (max-width: 980px) {
+
+    .dot-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dot-form-row2 {
+        grid-template-columns: 1fr;
+    }
+
+    .dot-actions-right .btn {
+        width: 100%;
+    }
+
+    .dot-orders-table {
+        min-width: 100%;
+        display: block;
+    }
+
+    .dot-orders-table thead {
+        display: none;
+    }
+
+    .dot-orders-table tbody tr {
+        display: block;
+        margin-bottom: 12px;
+    }
+
+    .dot-orders-table tbody td {
+        display: flex;
+        flex-direction: column;
+        white-space: normal;
+        padding: 12px !important;
+    }
+
+    .dot-actions-row {
+        justify-content: flex-start;
+    }
+}

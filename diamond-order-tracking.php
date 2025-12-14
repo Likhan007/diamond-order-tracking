@@ -111,6 +111,24 @@ function dot_is_admin_user( $user_id = null ) {
 }
 
 /* -----------------------------------------
+   Editor user check (WP Editor role)
+   ----------------------------------------- */
+function dot_is_editor_user( $user_id = null ) {
+    if ( ! $user_id ) {
+        $user_id = get_current_user_id();
+        if ( ! $user_id ) {
+            $plugin_user = dot_current_plugin_user();
+            $user_id = $plugin_user ? $plugin_user->ID : 0;
+        }
+    }
+
+    if ( ! $user_id ) return false;
+
+    // Check if user has Editor role (edit_pages capability) but is NOT an admin
+    return user_can( $user_id, 'edit_pages' ) && ! dot_is_admin_user( $user_id );
+}
+
+/* -----------------------------------------
    Plugin cookie helpers (optional lightweight auth)
    stored to support plugin-only login without WP session
    ----------------------------------------- */
@@ -314,13 +332,25 @@ function dot_search_orders() {
     $like = '%' . $wpdb->esc_like( $q ) . '%';
     $orders_table = $wpdb->prefix . 'diamond_orders';
 
-    if ( dot_is_admin_user() ) {
+    $is_admin = dot_is_admin_user();
+    $is_editor = dot_is_editor_user();
+
+    if ( $is_admin ) {
+        // Admins can search by code or email
         $sql = $wpdb->prepare(
             "SELECT id, order_code, style_name, client_email, quantity, updated_at FROM {$orders_table} WHERE (order_code LIKE %s OR client_email LIKE %s) ORDER BY updated_at DESC LIMIT %d",
             $like, $like, 50
         );
         $rows = $wpdb->get_results( $sql );
+    } elseif ( $is_editor ) {
+        // Editors can only search by order code
+        $sql = $wpdb->prepare(
+            "SELECT id, order_code, style_name, quantity, updated_at FROM {$orders_table} WHERE order_code LIKE %s ORDER BY updated_at DESC LIMIT %d",
+            $like, 50
+        );
+        $rows = $wpdb->get_results( $sql );
     } else {
+        // Clients search by code and filter by their email
         $user = is_user_logged_in() ? wp_get_current_user() : dot_current_plugin_user();
         if ( ! $user ) wp_send_json_error('Not allowed');
         $user_email = strtolower( trim( $user->user_email ) );
@@ -331,7 +361,6 @@ function dot_search_orders() {
         $rows = $wpdb->get_results( $sql );
     }
 
-    $is_admin = dot_is_admin_user();
     $out = array();
     foreach ( $rows as $r ) {
         $out[] = array(
@@ -474,6 +503,9 @@ add_shortcode('login', function(){
         if ( user_can( $u->ID, 'manage_options' ) || user_can( $u->ID, 'manage_woocommerce' ) ) {
             wp_safe_redirect( site_url('/admin/') );
             exit;
+        } elseif ( dot_is_editor_user( $u->ID ) ) {
+            wp_safe_redirect( site_url('/editor/') );
+            exit;
         } else {
             wp_safe_redirect( site_url('/client/') );
             exit;
@@ -497,6 +529,8 @@ add_shortcode('login', function(){
                 dot_set_plugin_cookie( $user->ID, $remember );
                 if ( user_can( $user->ID, 'manage_options' ) || user_can( $user->ID, 'manage_woocommerce' ) ) {
                     wp_safe_redirect( site_url('/admin/') ); exit;
+                } elseif ( dot_is_editor_user( $user->ID ) ) {
+                    wp_safe_redirect( site_url('/editor/') ); exit;
                 } else {
                     wp_safe_redirect( site_url('/client/') ); exit;
                 }
@@ -688,6 +722,128 @@ add_shortcode('admin', function(){
 });
 
 /* -----------------------------------------
+   [editor] shortcode (restricted dashboard)
+   ----------------------------------------- */
+add_shortcode('editor', function(){
+    nocache_headers();
+    // Allow WP users or plugin-cookie users with Editor capability
+    $u = is_user_logged_in() ? wp_get_current_user() : dot_current_plugin_user();
+    if ( ! $u ) return '<div style="padding:20px;text-align:center">Please <a href="'.esc_url(site_url('/login/')).'">login</a>.</div>';
+    if ( ! dot_is_editor_user($u->ID) ) return '<div style="padding:20px;text-align:center;color:#b00">Access denied. Editor role required.</div>';
+
+    global $wpdb;
+    $orders_table = $wpdb->prefix . 'diamond_orders';
+
+    // READ orders (editors can view all orders but can't see emails)
+    $orders = $wpdb->get_results( "SELECT * FROM {$orders_table} ORDER BY updated_at DESC, created_at DESC LIMIT 500" );
+
+    ob_start();
+    ?>
+    <div class="dot-admin-wrap">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <h2 style="margin:0;color:#222">Production Editor</h2>
+        <a href="<?php echo esc_url( add_query_arg('dot_logout','1', site_url('/editor/') ) ); ?>" style="color:#0077b6">Logout</a>
+      </div>
+
+      <!-- Disabled Create Order Form -->
+      <div class="dot-card dot-create-card dot-create-card--disabled" title="Only users with admin privilege can create orders">
+        <div style="position:relative;">
+          <div style="position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(255,255,255,0.7);z-index:10;display:flex;align-items:center;justify-content:center;border-radius:12px;">
+            <div style="background:#fff;padding:12px 24px;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.15);font-weight:700;color:#666;">
+              🔒 Only users with admin privilege can create orders
+            </div>
+          </div>
+          <form class="dot-create-form" novalidate>
+            <!-- row 1: three equal columns -->
+            <div class="dot-create-grid">
+              <div class="dot-field">
+                <label class="dot-label">Order Code</label>
+                <input name="order_code" class="dot-input dot-input--full" placeholder="e.g. POU22559" disabled>
+              </div>
+
+              <div class="dot-field">
+                <label class="dot-label">Client Emails</label>
+                <input name="client_email" class="dot-input dot-input--full" placeholder="a@x.com, b@y.com" disabled>
+              </div>
+
+              <div class="dot-field">
+                <label class="dot-label">Style</label>
+                <input name="style_name" class="dot-input dot-input--full" placeholder="Denim Jacket" disabled>
+              </div>
+            </div>
+
+            <!-- row 2: qty | notes | action -->
+            <div class="dot-create-grid-row2">
+              <div class="dot-field dot-qty-field">
+                <label class="dot-label">Qty</label>
+                <input name="quantity" type="number" class="dot-input dot-input--qty" placeholder="0" min="0" step="1" disabled>
+              </div>
+
+              <div class="dot-field dot-notes-field">
+                <label class="dot-label">Notes</label>
+                <input name="notes" class="dot-input dot-input--full" placeholder="Internal notes" disabled>
+              </div>
+
+              <div class="dot-field dot-action-field">
+                <div class="dot-action-wrapper">
+                  <button class="btn btn-primary dot-create-btn" type="button" aria-label="Create Order" disabled>Create Order</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Search -->
+      <div class="dot-search-wrap" style="margin-bottom:12px;">
+        <input id="dot-search-input" class="dot-input" placeholder="Search by order code..." autocomplete="off" />
+        <i class="fa-solid fa-magnifying-glass dot-search-icon" aria-hidden="true"></i>
+        <div id="dot-search-results" class="dot-search-results"></div>
+      </div>
+
+      <!-- Orders Table (NO Client Column) -->
+      <div class="dot-table-card" style="margin-top:14px;">
+        <table class="dot-orders-table">
+          <thead>
+            <tr>
+              <th style="width:160px">Order</th>
+              <th style="width:200px">Style/Qty</th>
+              <th style="width:160px">Updated</th>
+              <th style="width:160px">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php if ( empty($orders) ): ?>
+              <tr><td colspan="4" style="text-align:center;padding:18px;color:#666">No orders yet.</td></tr>
+            <?php else: foreach ( $orders as $r ): ?>
+              <tr>
+                <td>
+                  <div class="dot-order-code"><b>Code: </b><?php echo esc_html($r->order_code); ?></div>
+                </td>
+
+                <td>
+                  <span class="dot-style"><?php echo esc_html($r->style_name); ?></span>
+                  <span class="dot-qty"><?php echo intval($r->quantity); ?> pcs</span>
+                </td>
+
+                <td class="dot-updated"><?php echo esc_html($r->updated_at); ?></td>
+
+                <td class="dot-actions-cell">
+                  <div class="dot-actions-row">
+                    <a class="dot-btn dot-btn-edit" href="<?php echo esc_url(site_url('/order/?id=' . intval($r->id))); ?>">Edit</a>
+                  </div>
+                </td>
+              </tr>
+            <?php endforeach; endif; ?>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <?php
+    return ob_get_clean();
+});
+
+/* -----------------------------------------
    [client] shortcode
    ----------------------------------------- */
 add_shortcode('client', function(){
@@ -749,6 +905,7 @@ add_shortcode('order', function(){
     if ( ! $user ) return '<div style="text-align:center;color:#b00;padding:20px">Access denied.</div>';
 
     $is_admin = user_can($user->ID,'manage_options') || user_can($user->ID,'manage_woocommerce');
+    $is_editor = dot_is_editor_user($user->ID);
     $client_username = $user ? ($user->user_login ?: $user->display_name ?: $user->user_email) : '';
 
     $is_client = false;
@@ -757,30 +914,48 @@ add_shortcode('order', function(){
         $is_client = ( strpos( $norm, ',' . strtolower( $user->user_email ) . ',' ) !== false );
     }
 
-    if ( ! $is_admin && ! $is_client ) return '<div style="text-align:center;color:#b00;padding:20px">Access denied.</div>';
+    // Allow admins, editors, and assigned clients
+    if ( ! $is_admin && ! $is_editor && ! $is_client ) return '<div style="text-align:center;color:#b00;padding:20px">Access denied.</div>';
 
     $stages = $wpdb->get_results( $wpdb->prepare("SELECT * FROM {$stages_table} WHERE order_id=%d ORDER BY id ASC", $id) );
 
-    // Save edits (admins only)
-    if ( $is_admin && isset($_POST['dot_save_nonce']) && wp_verify_nonce($_POST['dot_save_nonce'], 'dot_save') ) {
+    // Save edits (admins and editors)
+    if ( ($is_admin || $is_editor) && isset($_POST['dot_save_nonce']) && wp_verify_nonce($_POST['dot_save_nonce'], 'dot_save') ) {
         $order_code = sanitize_text_field( $_POST['order_code'] ?? '' );
         $dup = $wpdb->get_var( $wpdb->prepare("SELECT COUNT(*) FROM {$orders_table} WHERE order_code=%s AND id!=%d", $order_code, $id) );
         if ( $dup > 0 ) {
             echo '<div style="background:#fff3f3;color:#b00;padding:10px;border-radius:6px;margin-bottom:10px;">Order code already exists.</div>';
         } else {
-            $wpdb->update(
-                $orders_table,
-                array(
-                    'order_code' => $order_code,
-                    'client_email' => dot_normalize_emails( $_POST['client_email'] ?? '' ),
-                    'style_name' => sanitize_text_field( $_POST['style_name'] ?? '' ),
-                    'quantity' => intval( $_POST['quantity'] ?? 0 ),
-                    'notes' => sanitize_textarea_field( $_POST['notes'] ?? '' )
-                ),
-                array('id' => $id),
-                array('%s','%s','%s','%d','%s'),
-                array('%d')
-            );
+            // Admins can update everything, Editors can't update client_email
+            if ( $is_admin ) {
+                $wpdb->update(
+                    $orders_table,
+                    array(
+                        'order_code' => $order_code,
+                        'client_email' => dot_normalize_emails( $_POST['client_email'] ?? '' ),
+                        'style_name' => sanitize_text_field( $_POST['style_name'] ?? '' ),
+                        'quantity' => intval( $_POST['quantity'] ?? 0 ),
+                        'notes' => sanitize_textarea_field( $_POST['notes'] ?? '' )
+                    ),
+                    array('id' => $id),
+                    array('%s','%s','%s','%d','%s'),
+                    array('%d')
+                );
+            } else {
+                // Editors can't modify client_email
+                $wpdb->update(
+                    $orders_table,
+                    array(
+                        'order_code' => $order_code,
+                        'style_name' => sanitize_text_field( $_POST['style_name'] ?? '' ),
+                        'quantity' => intval( $_POST['quantity'] ?? 0 ),
+                        'notes' => sanitize_textarea_field( $_POST['notes'] ?? '' )
+                    ),
+                    array('id' => $id),
+                    array('%s','%s','%d','%s'),
+                    array('%d')
+                );
+            }
 
             foreach ( $stages as $s ) {
                 $status = sanitize_text_field( $_POST['stage_status_' . $s->id] ?? 'pending' );
@@ -835,23 +1010,34 @@ add_shortcode('order', function(){
           <h2 style="margin:0">Order Code# <?php echo esc_html($order->order_code); ?></h2>
           <div style="color:#666"><?php echo esc_html($order->style_name); ?></div>
           <div style="color:#666">
-            <?php echo $is_admin ? esc_html($order->client_email) : esc_html($client_username); ?>
+            <?php 
+              // Only admins see client email, editors and clients see username
+              echo $is_admin ? esc_html($order->client_email) : esc_html($client_username); 
+            ?>
           </div>
         </div>
 
         <div>
           <?php
-            $back_url = $is_admin ? site_url('/admin/') : site_url('/client/');
-            $back_label = $is_admin ? 'Back to Admin' : 'Back to My Orders';
+            if ( $is_admin ) {
+                $back_url = site_url('/admin/');
+                $back_label = 'Back to Admin';
+            } elseif ( $is_editor ) {
+                $back_url = site_url('/editor/');
+                $back_label = 'Back to Editor';
+            } else {
+                $back_url = site_url('/client/');
+                $back_label = 'Back to My Orders';
+            }
           ?>
           <a href="<?php echo esc_url( $back_url ); ?>" class="dot-btn dot-btn-edit" style="margin-right:10px;">← <?php echo esc_html( $back_label ); ?></a>
-          <?php if ( ! $is_admin ): ?>
+          <?php if ( ! $is_admin && ! $is_editor ): ?>
             <a href="?dot_logout=1" style="color:#0077b6;">Logout</a>
           <?php endif; ?>
         </div>
       </div>
 
-      <?php if ( $is_admin && isset($_GET['dot_saved']) ): ?>
+      <?php if ( ($is_admin || $is_editor) && isset($_GET['dot_saved']) ): ?>
         <div style="background:#e6f8e6;color:#0a0;padding:10px;border-radius:6px;margin-bottom:12px;">Saved successfully.</div>
       <?php endif; ?>
 
@@ -864,7 +1050,7 @@ add_shortcode('order', function(){
         </div>
       </div>
 
-      <?php if ($is_admin) echo '<form method="post">'; ?>
+      <?php if ($is_admin || $is_editor) echo '<form method="post">'; ?>
 
       <div style="display:grid;grid-template-columns:1fr 330px;gap:20px;">
         <div>
@@ -880,7 +1066,7 @@ add_shortcode('order', function(){
                   <?php if ( $s->remarks ): ?><div style="color:#444;margin-top:6px;"><?php echo nl2br( esc_html($s->remarks) ); ?></div><?php endif; ?>
                 </div>
 
-                <?php if ( $is_admin ): ?>
+                <?php if ( $is_admin || $is_editor ): ?>
                   <div style="width:200px;text-align:right;">
                     <select name="stage_status_<?php echo intval($s->id); ?>" style="padding:8px;border:1px solid #ddd;border-radius:6px;width:100%;">
                       <option value="pending" <?php selected( $s->status, 'pending' ); ?>>Pending</option>
@@ -900,11 +1086,13 @@ add_shortcode('order', function(){
 
         <div style="background:#fff;padding:12px;border-radius:8px;box-shadow:0 6px 16px rgba(0,0,0,0.04);">
           <h3 style="margin-top:0">Order details</h3>
-          <?php if ( $is_admin ): ?>
+          <?php if ( $is_admin || $is_editor ): ?>
             <label style="font-weight:700;display:block;margin-top:6px">Order Code</label>
             <input name="order_code" value="<?php echo esc_attr($order->order_code); ?>" style="width:100%;padding:8px;border:1px solid #ddd;border-radius:6px;">
-            <label style="font-weight:700;display:block;margin-top:6px">Client Emails</label>
-            <input name="client_email" value="<?php echo esc_attr($order->client_email); ?>" style="width:100%;padding:8px;border:1px solid #ddd;border-radius:6px;">
+            <?php if ( $is_admin ): // Only admins can see/edit client emails ?>
+              <label style="font-weight:700;display:block;margin-top:6px">Client Emails</label>
+              <input name="client_email" value="<?php echo esc_attr($order->client_email); ?>" style="width:100%;padding:8px;border:1px solid #ddd;border-radius:6px;">
+            <?php endif; ?>
             <label style="font-weight:700;display:block;margin-top:6px">Style</label>
             <input name="style_name" value="<?php echo esc_attr($order->style_name); ?>" style="width:100%;padding:8px;border:1px solid #ddd;border-radius:6px;">
             <label style="font-weight:700;display:block;margin-top:6px">Quantity</label>
@@ -922,25 +1110,27 @@ add_shortcode('order', function(){
             <p><strong>Notes:</strong><br><?php echo nl2br( esc_html($order->notes) ); ?></p>
           <?php endif; ?>
 
-          <hr style="margin:12px 0;">
-          <h4 style="margin-top:6px">Comments</h4>
-          <div id="dot-comments-area">
-            <?php echo dot_render_comments_html_option( $order->id, $is_admin ); ?>
-          </div>
-
-          <?php if ( ! $is_admin ): ?>
-            <div style="margin-top:8px;">
-              <textarea id="dot-comment-text" rows="3" class="dot-input" placeholder="Write a comment..."></textarea>
-              <div style="text-align:right;margin-top:8px;">
-                <button id="dot-comment-submit" class="btn btn-primary">Post comment</button>
-              </div>
+          <?php if ( ! $is_editor ): // Editors cannot see or add comments ?>
+            <hr style="margin:12px 0;">
+            <h4 style="margin-top:6px">Comments</h4>
+            <div id="dot-comments-area">
+              <?php echo dot_render_comments_html_option( $order->id, $is_admin ); ?>
             </div>
+
+            <?php if ( ! $is_admin ): ?>
+              <div style="margin-top:8px;">
+                <textarea id="dot-comment-text" rows="3" class="dot-input" placeholder="Write a comment..."></textarea>
+                <div style="text-align:right;margin-top:8px;">
+                  <button id="dot-comment-submit" class="btn btn-primary">Post comment</button>
+                </div>
+              </div>
+            <?php endif; ?>
           <?php endif; ?>
 
         </div>
       </div>
 
-      <?php if ($is_admin) echo '</form>'; ?>
+      <?php if ($is_admin || $is_editor) echo '</form>'; ?>
     </div>
     <?php
     return ob_get_clean();

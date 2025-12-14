@@ -560,3 +560,22 @@ body textarea.dot-input {
         justify-content: flex-start;
     }
 }
+
+/* ========================================================
+   EDITOR ROLE - Disabled Create Order Form
+   ======================================================== */
+
+.dot-create-card--disabled {
+  position: relative;
+  opacity: 0.65;
+}
+
+.dot-create-card--disabled input,
+.dot-create-card--disabled button {
+  cursor: not-allowed !important;
+}
+
+.dot-create-card--disabled .dot-create-btn {
+  opacity: 0.5;
+}
+

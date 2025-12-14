@@ -687,20 +687,20 @@ add_shortcode('admin', function(){
               <tr><td colspan="5" style="text-align:center;padding:18px;color:#666">No orders yet.</td></tr>
             <?php else: foreach ( $orders as $r ): ?>
               <tr>
-                <td>
+                <td data-label="Order">
                   <div class="dot-order-code"><b>Code: </b><?php echo esc_html($r->order_code); ?></div>
                 </td>
 
-                <td class="dot-client"><?php echo esc_html( implode(', ', array_map('trim', explode(',', $r->client_email))) ); ?></td>
+                <td class="dot-client" data-label="Client(s)"><?php echo esc_html( implode(', ', array_map('trim', explode(',', $r->client_email))) ); ?></td>
 
-                <td>
+                <td data-label="Style/Qty">
                   <span class="dot-style"><?php echo esc_html($r->style_name); ?></span>
                   <span class="dot-qty"><?php echo intval($r->quantity); ?> pcs</span>
                 </td>
 
-                <td class="dot-updated"><?php echo esc_html($r->updated_at); ?></td>
+                <td class="dot-updated" data-label="Updated"><?php echo esc_html($r->updated_at); ?></td>
 
-                <td class="dot-actions-cell">
+                <td class="dot-actions-cell" data-label="Actions">
                   <div class="dot-actions-row">
                     <a class="dot-btn dot-btn-edit" href="<?php echo esc_url(site_url('/order/?id=' . intval($r->id))); ?>">Edit</a>
 
@@ -817,18 +817,18 @@ add_shortcode('editor', function(){
               <tr><td colspan="4" style="text-align:center;padding:18px;color:#666">No orders yet.</td></tr>
             <?php else: foreach ( $orders as $r ): ?>
               <tr>
-                <td>
+                <td data-label="Order">
                   <div class="dot-order-code"><b>Code: </b><?php echo esc_html($r->order_code); ?></div>
                 </td>
 
-                <td>
+                <td data-label="Style/Qty">
                   <span class="dot-style"><?php echo esc_html($r->style_name); ?></span>
                   <span class="dot-qty"><?php echo intval($r->quantity); ?> pcs</span>
                 </td>
 
-                <td class="dot-updated"><?php echo esc_html($r->updated_at); ?></td>
+                <td class="dot-updated" data-label="Updated"><?php echo esc_html($r->updated_at); ?></td>
 
-                <td class="dot-actions-cell">
+                <td class="dot-actions-cell" data-label="Actions">
                   <div class="dot-actions-row">
                     <a class="dot-btn dot-btn-edit" href="<?php echo esc_url(site_url('/order/?id=' . intval($r->id))); ?>">Edit</a>
                   </div>

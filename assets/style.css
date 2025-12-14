@@ -26,7 +26,7 @@ body textarea.dot-input {
 
 .dot-card {
     background: linear-gradient(180deg, #ffffff 0%, #fdfdff 100%);
-    border: 1px solid rgba(15,23,42,0.08);
+    border: 1px solid rgba(15, 23, 42, 0.08);
     padding: 18px;
     border-radius: 14px;
     box-shadow: 0 18px 40px rgba(15, 23, 42, 0.09);
@@ -47,7 +47,8 @@ body textarea.dot-input {
     grid-template-columns: 110px 1fr 150px;
     gap: 12px;
     margin-top: 12px;
-    align-items: stretch; /* Prevents overlap */
+    align-items: stretch;
+    /* Prevents overlap */
 }
 
 .dot-field {
@@ -72,13 +73,13 @@ body textarea.dot-input {
     width: 100%;
     background: #fdfefe;
     box-sizing: border-box;
-    box-shadow: inset 0 1px 2px rgba(15,23,42,0.06);
+    box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.06);
 }
 
 .dot-input:focus {
     outline: none;
     border-color: #0077b6;
-    box-shadow: 0 0 0 3px rgba(0,119,182,0.07);
+    box-shadow: 0 0 0 3px rgba(0, 119, 182, 0.07);
 }
 
 .dot-input--qty {
@@ -113,7 +114,7 @@ body textarea.dot-input {
 .btn-primary {
     background: #111827;
     color: #fff;
-    box-shadow: 0 3px 0 rgba(0,0,0,0.1);
+    box-shadow: 0 3px 0 rgba(0, 0, 0, 0.1);
 }
 
 .btn-primary:hover {
@@ -124,9 +125,9 @@ body textarea.dot-input {
 
 .dot-table-card {
     background: #fefefe;
-    border: 1px solid rgba(15,23,42,0.08);
+    border: 1px solid rgba(15, 23, 42, 0.08);
     border-radius: 14px;
-    box-shadow: 0 18px 40px rgba(15,23,42,0.08);
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
     overflow: hidden;
 }
 
@@ -199,8 +200,8 @@ body textarea.dot-input {
     gap: 8px;
 }
 
-.dot-actions-row > a,
-.dot-actions-row > form {
+.dot-actions-row>a,
+.dot-actions-row>form {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -235,10 +236,19 @@ body textarea.dot-input {
     border-color: #fdecea;
 }
 
-.dot-btn-edit:hover { background: #f4fbff; transform: translateY(-1px); }
-.dot-btn-delete:hover { background: #fff5f5; transform: translateY(-1px); }
+.dot-btn-edit:hover {
+    background: #f4fbff;
+    transform: translateY(-1px);
+}
 
-.dot-delete-form { margin: 0 !important; }
+.dot-btn-delete:hover {
+    background: #fff5f5;
+    transform: translateY(-1px);
+}
+
+.dot-delete-form {
+    margin: 0 !important;
+}
 
 /* SEARCH DROPDOWN ------------------------------------------ */
 
@@ -247,7 +257,9 @@ body textarea.dot-input {
     max-width: 920px;
 }
 
-#dot-search-input { width: 100%; }
+#dot-search-input {
+    width: 100%;
+}
 
 .dot-search-results {
     display: none;
@@ -260,7 +272,7 @@ body textarea.dot-input {
     background: #fff;
     border: 1px solid #eee;
     border-radius: 8px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
     max-height: 320px;
     overflow-y: auto;
 }
@@ -301,7 +313,7 @@ body textarea.dot-input {
     border-radius: 12px;
     background: #fdfdff;
     margin-bottom: 10px;
-    box-shadow: 0 6px 16px rgba(15,23,42,0.05);
+    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.05);
 }
 
 .dot-comment-meta {
@@ -352,164 +364,226 @@ body textarea.dot-input {
    =========================== */
 
 .dot-create-card {
-  padding: 18px;
-  border: 1px solid rgba(15,23,42,0.04);
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 6px 24px rgba(4,12,20,0.04);
+    padding: 18px;
+    border: 1px solid rgba(15, 23, 42, 0.04);
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 24px rgba(4, 12, 20, 0.04);
 }
 
 /* Grid layout for row1: 3 equal columns */
 .dot-create-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  align-items: start;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    align-items: start;
 }
 
 /* Row2 uses flex so button can align and notes stay compact */
 .dot-create-grid-row2 {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  align-items: flex-end;
-  margin-top: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: flex-end;
+    margin-top: 12px;
 }
 
 .dot-qty-field {
-  flex: 0 0 120px;
+    flex: 0 0 120px;
 }
 
 .dot-notes-field {
-  flex: 1 1 360px;
-  min-width: 260px;
+    flex: 1 1 360px;
+    min-width: 260px;
 }
 
 .dot-action-field {
-  flex: 0 0 170px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
+    flex: 0 0 170px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
 }
 
 .dot-action-field input[type="hidden"] {
-  display: none;
+    display: none;
 }
 
 /* mobile collapse */
 @media (max-width: 880px) {
-  .dot-create-grid {
-    grid-template-columns: 1fr;
-  }
-  .dot-create-grid-row2 {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  .dot-create-grid-row2 .dot-action-field .dot-action-wrapper { display:flex; justify-content:flex-start; }
+    .dot-create-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dot-create-grid-row2 {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .dot-create-grid-row2 .dot-action-field .dot-action-wrapper {
+        display: flex;
+        justify-content: flex-start;
+    }
 }
 
 /* Field styling */
-.dot-create-card .dot-field { display:flex; flex-direction:column; }
-.dot-create-card .dot-label { font-size:13px; font-weight:700; margin-bottom:6px; color:#111827; }
-.dot-create-card .dot-input { padding:10px 12px; border:1px solid #e2e8f0; border-radius:10px; background:#fff; font-size:14px; box-sizing:border-box; }
+.dot-create-card .dot-field {
+    display: flex;
+    flex-direction: column;
+}
+
+.dot-create-card .dot-label {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: #111827;
+}
+
+.dot-create-card .dot-input {
+    padding: 10px 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    background: #fff;
+    font-size: 14px;
+    box-sizing: border-box;
+}
 
 /* Qty visible border and center alignment */
-.dot-create-card .dot-input--qty { border:1px solid #cbd5dd; max-width:100%; }
+.dot-create-card .dot-input--qty {
+    border: 1px solid #cbd5dd;
+    max-width: 100%;
+}
 
 /* For inputs that should expand to full width in their cell */
-.dot-input--full { width:100%; }
+.dot-input--full {
+    width: 100%;
+}
 
 /* Action wrapper ensures the button sits within its column bottom-right aligned on desktop */
 .dot-action-wrapper {
-  display:flex;
-  align-items:center;
-  justify-content:flex-end;
-  width:100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
 }
 
 /* Button styling (no absolute positioning) */
 .dot-create-btn {
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  background:#111827;
-  color:#fff;
-  padding:0 18px !important;
-  min-width:150px !important;
-  line-height:40px !important;
-  border-radius:30px !important;
-  border:none !important;
-  cursor:pointer;
-  font-weight:700;
-  box-shadow:0 4px 12px rgba(0,0,0,0.1);
-  transition:transform .15s ease, box-shadow .15s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #111827;
+    color: #fff;
+    padding: 0 18px !important;
+    min-width: 150px !important;
+    line-height: 40px !important;
+    border-radius: 30px !important;
+    border: none !important;
+    cursor: pointer;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform .15s ease, box-shadow .15s ease;
 }
+
 .dot-create-btn:hover {
-  transform:translateY(-1px);
-  box-shadow:0 6px 14px rgba(0,0,0,0.12);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
 }
 
 /* On narrow screens make button full width and natural flow */
 @media (max-width: 880px) {
-  .dot-create-btn { width:100%; }
-  .dot-action-wrapper { justify-content:flex-start; }
+    .dot-create-btn {
+        width: 100%;
+    }
+
+    .dot-action-wrapper {
+        justify-content: flex-start;
+    }
 }
 
 /* subtle focus states */
 .dot-create-card .dot-input:focus {
-  border-color:#0077b6;
-  box-shadow:0 0 0 4px rgba(0,119,182,0.06);
-  outline:none;
+    border-color: #0077b6;
+    box-shadow: 0 0 0 4px rgba(0, 119, 182, 0.06);
+    outline: none;
 }
+
 /* ---------- Compact desktop spacing without breaking alignment ---------- */
 @media (min-width: 881px) {
-  .dot-create-card { padding: 16px; }
-  .dot-create-grid { gap: 10px; }
-  .dot-create-grid-row2 { gap: 10px; }
+    .dot-create-card {
+        padding: 16px;
+    }
+
+    .dot-create-grid {
+        gap: 10px;
+    }
+
+    .dot-create-grid-row2 {
+        gap: 10px;
+    }
 }
 
 /* ---------- Tighten vertical spacing across the form ---------- */
 .dot-create-card .dot-input,
 .dot-create-card .dot-label {
-  line-height: 1.1;
+    line-height: 1.1;
 }
 
 /* reduce input vertical padding a bit to make rows shorter */
-.dot-create-card .dot-input { padding: 8px 10px; border-radius: 8px; }
+.dot-create-card .dot-input {
+    padding: 8px 10px;
+    border-radius: 8px;
+}
 
 /* ---------- Search icon style (inside input) ---------- */
-.dot-search-wrap { position: relative; max-width:920px; }
-.dot-search-wrap .dot-search-icon {
-  position: absolute;
-  left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 14px;
-  color: #6b7280;
-  pointer-events: none;
-  z-index: 3;
+.dot-search-wrap {
+    position: relative;
+    max-width: 920px;
 }
+
+.dot-search-wrap .dot-search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    color: #6b7280;
+    pointer-events: none;
+    z-index: 3;
+}
+
 #dot-search-input {
-  padding-left: 36px; /* space for icon */
+    padding-left: 36px;
+    /* space for icon */
 }
 
 /* make the icon slightly darker on focus */
-#dot-search-input:focus + .dot-search-icon,
-#dot-search-input:focus ~ .dot-search-icon {
-  color: #0077b6;
+#dot-search-input:focus+.dot-search-icon,
+#dot-search-input:focus~.dot-search-icon {
+    color: #0077b6;
 }
 
 /* mobile: revert to stacked labels (keep vertical layout) */
 @media (max-width: 880px) {
-  .dot-create-card .dot-label { width: auto; margin-bottom:6px; display:block; }
-  .dot-create-grid .dot-field,
-  .dot-create-grid-row2 .dot-field {
-    display:flex;
-    flex-direction:column;
-    align-items:stretch;
-  }
-  #dot-search-input { padding-left: 12px; }
-  .dot-search-wrap .dot-search-icon { left: 8px; }
+    .dot-create-card .dot-label {
+        width: auto;
+        margin-bottom: 6px;
+        display: block;
+    }
+
+    .dot-create-grid .dot-field,
+    .dot-create-grid-row2 .dot-field {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    #dot-search-input {
+        padding-left: 12px;
+    }
+
+    .dot-search-wrap .dot-search-icon {
+        left: 8px;
+    }
 }
 
 
@@ -521,8 +595,16 @@ body textarea.dot-input {
 
 /* RESPONSIVE ------------------------------------------------ */
 
+/* Tablet and below (980px) */
 @media (max-width: 980px) {
 
+    /* Admin wrapper - reduce padding */
+    .dot-admin-wrap {
+        padding: 0 16px;
+        margin: 12px auto;
+    }
+
+    /* Create order form - stack columns */
     .dot-form-grid {
         grid-template-columns: 1fr;
     }
@@ -535,6 +617,12 @@ body textarea.dot-input {
         width: 100%;
     }
 
+    /* Orders Table - Card view */
+    .dot-table-card {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
     .dot-orders-table {
         min-width: 100%;
         display: block;
@@ -544,20 +632,328 @@ body textarea.dot-input {
         display: none;
     }
 
+    .dot-orders-table tbody {
+        display: block;
+    }
+
     .dot-orders-table tbody tr {
         display: block;
-        margin-bottom: 12px;
+        margin-bottom: 16px;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
     }
 
     .dot-orders-table tbody td {
-        display: flex;
-        flex-direction: column;
+        display: block;
+        padding: 12px 16px !important;
+        border-bottom: 1px solid #f0f2f7;
         white-space: normal;
-        padding: 12px !important;
+        text-align: left !important;
+    }
+
+    .dot-orders-table tbody td:last-child {
+        border-bottom: none;
+    }
+
+    /* Add labels for mobile */
+    .dot-orders-table tbody td:before {
+        content: attr(data-label);
+        font-weight: 700;
+        display: block;
+        margin-bottom: 4px;
+        color: #374151;
+        font-size: 12px;
+        text-transform: uppercase;
     }
 
     .dot-actions-row {
         justify-content: flex-start;
+        gap: 8px;
+        margin-top: 8px;
+    }
+
+    .dot-actions-cell {
+        text-align: left !important;
+    }
+
+    /* Order detail page - Stack grid */
+    div[style*="grid-template-columns:1fr 330px"] {
+        display: block !important;
+    }
+
+    div[style*="grid-template-columns:1fr 330px"]>div {
+        width: 100% !important;
+        margin-bottom: 16px;
+    }
+}
+
+/* Mobile phones (640px and below) */
+@media (max-width: 640px) {
+
+    /* Global spacing */
+    .dot-admin-wrap {
+        margin: 8px auto;
+        padding: 0 12px;
+        max-width: 100%;
+    }
+
+    .dot-card {
+        padding: 14px;
+        margin-bottom: 16px;
+        max-width: 100%;
+    }
+
+    /* FIX #2: Ensure full width for all containers */
+    .dot-table-card,
+    .dot-create-card,
+    .dot-search-wrap {
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+
+    /* Header - Stack on mobile */
+    div[style*="display:flex;justify-content:space-between"] {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 10px;
+    }
+
+    div[style*="display:flex;justify-content:space-between"] h2 {
+        font-size: 20px !important;
+        margin-bottom: 8px !important;
+    }
+
+    /* Search bar */
+    .dot-search-wrap {
+        max-width: 100%;
+        position: relative;
+    }
+
+    #dot-search-input {
+        font-size: 16px;
+        padding-left: 40px !important;
+        width: 100%;
+        /* Prevent zoom on iOS */
+    }
+
+    .dot-search-wrap .dot-search-icon {
+        left: 12px !important;
+        font-size: 16px !important;
+    }
+
+    /* FIX #1: Buttons - Make ALL buttons full-width and styled consistently */
+    .btn,
+    .dot-btn,
+    .dot-btn-edit,
+    .dot-btn-delete {
+        min-height: 44px !important;
+        padding: 12px 16px !important;
+        font-size: 15px !important;
+        width: 100% !important;
+        display: block !important;
+        text-align: center !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+        box-sizing: border-box;
+    }
+
+    /* FIX #1: Edit button - Blue background, full width */
+    .dot-btn-edit {
+        background: #0077b6 !important;
+        color: #fff !important;
+        border: none !important;
+        margin-bottom: 8px !important;
+    }
+
+    .dot-btn-edit:hover {
+        background: #006299 !important;
+    }
+
+    /* Delete button - Red, full width */
+    .dot-btn-delete {
+        background: #dc2626 !important;
+        color: #fff !important;
+        border: none !important;
+    }
+
+    .dot-btn-delete:hover {
+        background: #b91c1c !important;
+    }
+
+    .dot-create-btn {
+        width: 100% !important;
+        min-width: auto !important;
+    }
+
+    /* FIX #3: Better card visibility - Enhanced borders and shadows */
+    .dot-orders-table tbody tr {
+        border: 2px solid #0077b6 !important;
+        border-radius: 12px !important;
+        margin-bottom: 20px !important;
+        box-shadow: 0 4px 12px rgba(0, 119, 182, 0.15) !important;
+        background: #fff !important;
+        overflow: hidden;
+    }
+
+    /* FIX #3: Add top accent to each card */
+    .dot-orders-table tbody tr::before {
+        content: "";
+        display: block;
+        height: 4px;
+        background: linear-gradient(90deg, #0077b6, #00a8e8);
+        margin: -14px -16px 12px -16px;
+    }
+
+    /* FIX #3: Better separation between fields in cards */
+    .dot-orders-table tbody td {
+        padding: 14px 16px !important;
+        border-bottom: 1px solid #e5e7eb !important;
+        background: #fff;
+    }
+
+    .dot-orders-table tbody td:last-child {
+        border-bottom: none !important;
+        padding-bottom: 16px !important;
+    }
+
+    /* FIX #3: Make labels more visible */
+    .dot-orders-table tbody td:before {
+        content: attr(data-label);
+        font-weight: 700;
+        display: block;
+        margin-bottom: 6px;
+        color: #1f2937;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    /* Order detail page - Single column */
+    div[style*="max-width:980px"] {
+        max-width: 100% !important;
+        margin: 12px auto !important;
+        padding: 0 12px !important;
+    }
+
+    /* Stage cards - Full width inputs */
+    div[style*="width:200px;text-align:right"] {
+        width: 100% !important;
+        text-align: left !important;
+    }
+
+    /* Stage layout - Stack vertically */
+    div[style*="display:flex;justify-content:space-between;gap:12px"] {
+        flex-direction: column !important;
+        gap: 8px !important;
+    }
+
+    /* Order details sidebar */
+    div[style*="background:#fff;padding:12px"] {
+        padding: 12px !important;
+    }
+
+    div[style*="background:#fff;padding:16px"] {
+        padding: 12px !important;
+    }
+
+    /* Form inputs - Full width */
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    input[type="email"],
+    input[type="password"],
+    textarea,
+    select {
+        max-width: 100% !important;
+        font-size: 16px !important;
+        /* Prevent zoom on iOS */
+    }
+
+    /* Progress bar container */
+    div[style*="margin-bottom:18px"] {
+        margin-bottom: 12px !important;
+    }
+
+    /* Comment section */
+    .dot-comment {
+        padding: 10px 12px;
+    }
+
+    .dot-comment-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+
+    /* Table overflow scroll hint */
+    .dot-table-card {
+        position: relative;
+    }
+
+    .dot-table-card::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 20px;
+        background: linear-gradient(to left, rgba(255, 255, 255, 0.9), transparent);
+        pointer-events: none;
+    }
+}
+
+/* Small mobile (480px and below) */
+@media (max-width: 480px) {
+
+    /* Even smaller spacing */
+    .dot-admin-wrap {
+        padding: 0 8px;
+    }
+
+    .dot-card {
+        padding: 12px;
+        border-radius: 10px;
+    }
+
+    /* Smaller text */
+    h2 {
+        font-size: 18px !important;
+    }
+
+    h3 {
+        font-size: 16px !important;
+    }
+
+    h4 {
+        font-size: 14px !important;
+    }
+
+    /* Action buttons - Stack vertically */
+    .dot-actions-row {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .dot-actions-row>a,
+    .dot-actions-row>form,
+    .dot-btn {
+        width: 100% !important;
+        min-width: auto !important;
+    }
+
+    /* Progress percentage - Smaller */
+    div[style*="display:flex;justify-content:space-between;font-weight:700"] {
+        font-size: 14px !important;
+    }
+
+    /* Reduce box shadows for performance */
+    .dot-card,
+    .dot-table-card,
+    .dot-comment {
+        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06) !important;
     }
 }
 
@@ -566,16 +962,15 @@ body textarea.dot-input {
    ======================================================== */
 
 .dot-create-card--disabled {
-  position: relative;
-  opacity: 0.65;
+    position: relative;
+    opacity: 0.65;
 }
 
 .dot-create-card--disabled input,
 .dot-create-card--disabled button {
-  cursor: not-allowed !important;
+    cursor: not-allowed !important;
 }
 
 .dot-create-card--disabled .dot-create-btn {
-  opacity: 0.5;
+    opacity: 0.5;
 }
-
